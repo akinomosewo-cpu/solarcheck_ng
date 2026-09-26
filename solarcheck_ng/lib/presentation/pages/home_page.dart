@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/transitions/page_transitions.dart';
 import '../blocs/app_bloc.dart';
+import '../blocs/auth_cubit.dart';
 import '../widgets/section_card.dart';
 import 'equipment_page.dart';
 import 'installers_page.dart';
+import 'login_page.dart';
 import 'monitoring_page.dart';
 import 'sizing_page.dart';
 
@@ -56,6 +60,28 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+Future<void> _confirmLogout(BuildContext context) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text('Log out?'),
+      content: const Text('You can log back in any time with your local account.'),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Log out')),
+      ],
+    ),
+  );
+  if (confirmed == true && context.mounted) {
+    await context.read<AuthCubit>().logout();
+    if (context.mounted) {
+      context.pushReplacementFadeSlide(const LoginPage());
+    }
+  }
+}
+
 class _DashboardPage extends StatelessWidget {
   const _DashboardPage();
 
@@ -80,6 +106,13 @@ class _DashboardPage extends StatelessWidget {
                   const Gap(10),
                   Text('SolarCheck NG', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.textPrimary)),
                 ]),
+                actions: [
+                  IconButton(
+                    tooltip: 'Log out',
+                    icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondary),
+                    onPressed: () => _confirmLogout(context),
+                  ),
+                ],
               ),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -91,22 +124,36 @@ class _DashboardPage extends StatelessWidget {
                     Text('Your solar dashboard', style: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary)),
                     const Gap(20),
                     Row(children: [
-                      _StatCard(label: 'Appliances', value: state.appliances.length.toString(), color: AppColors.primary),
+                      _StatCard(label: 'Appliances', value: state.appliances.length.toString(), color: AppColors.primary)
+                          .animate()
+                          .fadeIn(delay: 0.ms, duration: 300.ms)
+                          .slideY(begin: 0.2, end: 0, delay: 0.ms, duration: 300.ms, curve: Curves.easeOutCubic),
                       const Gap(12),
-                      _StatCard(label: 'Equipment', value: state.equipment.length.toString(), color: AppColors.success),
+                      _StatCard(label: 'Equipment', value: state.equipment.length.toString(), color: AppColors.success)
+                          .animate()
+                          .fadeIn(delay: 90.ms, duration: 300.ms)
+                          .slideY(begin: 0.2, end: 0, delay: 90.ms, duration: 300.ms, curve: Curves.easeOutCubic),
                       const Gap(12),
-                      _StatCard(label: 'Leads sent', value: state.leads.length.toString(), color: AppColors.info),
+                      _StatCard(label: 'Leads sent', value: state.leads.length.toString(), color: AppColors.info)
+                          .animate()
+                          .fadeIn(delay: 180.ms, duration: 300.ms)
+                          .slideY(begin: 0.2, end: 0, delay: 180.ms, duration: 300.ms, curve: Curves.easeOutCubic),
                     ]),
                     const Gap(28),
                     Text('What you can do', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.textPrimary)),
                     const Gap(14),
-                    const _FeatureCard(icon: Icons.calculate_rounded, label: 'Size your solar system', color: AppColors.primary),
-                    const Gap(10),
-                    const _FeatureCard(icon: Icons.storefront_rounded, label: 'Compare installer quotes', color: AppColors.success),
-                    const Gap(10),
-                    const _FeatureCard(icon: Icons.qr_code_2_rounded, label: 'Register panel & battery serials', color: AppColors.info),
-                    const Gap(10),
-                    const _FeatureCard(icon: Icons.show_chart_rounded, label: 'Monitor system performance', color: AppColors.warning),
+                    ...[
+                      const _FeatureCard(icon: Icons.calculate_rounded, label: 'Size your solar system', color: AppColors.primary),
+                      const _FeatureCard(icon: Icons.storefront_rounded, label: 'Compare installer quotes', color: AppColors.success),
+                      const _FeatureCard(icon: Icons.qr_code_2_rounded, label: 'Register panel & battery serials', color: AppColors.info),
+                      const _FeatureCard(icon: Icons.show_chart_rounded, label: 'Monitor system performance', color: AppColors.warning),
+                    ].asMap().entries.expand((entry) sync* {
+                      if (entry.key > 0) yield const Gap(10);
+                      yield entry.value
+                          .animate()
+                          .fadeIn(delay: (260 + entry.key * 80).ms, duration: 300.ms)
+                          .slideX(begin: 0.06, end: 0, delay: (260 + entry.key * 80).ms, duration: 300.ms, curve: Curves.easeOutCubic);
+                    }),
                     const Gap(28),
                     if (state.sizingResult.numberOfPanels > 0) ...[
                       SectionCard(

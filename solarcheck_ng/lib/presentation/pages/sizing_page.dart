@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
@@ -103,7 +104,11 @@ class SizingPage extends StatelessWidget {
                   );
                 }),
               const Gap(20),
-              if (state.appliances.isNotEmpty) _ResultsPanel(result: state.sizingResult),
+              if (state.appliances.isNotEmpty)
+                _ResultsPanel(result: state.sizingResult)
+                    .animate(key: ValueKey(state.appliances.length))
+                    .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                    .scale(begin: const Offset(0.92, 0.92), end: const Offset(1, 1), duration: 350.ms, curve: Curves.easeOutBack),
             ],
           );
         },

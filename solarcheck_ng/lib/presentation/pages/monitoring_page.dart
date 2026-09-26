@@ -33,8 +33,8 @@ class MonitoringPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Performance Monitor', style: AppTextStyles.displaySmall.copyWith(color: AppColors.textPrimary)),
-                      const Gap(4),
+                      Text('Performance Monitor', style: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary)),
+                      const Gap(6),
                       Text('Track your system so problems get caught early',
                           style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
                     ],

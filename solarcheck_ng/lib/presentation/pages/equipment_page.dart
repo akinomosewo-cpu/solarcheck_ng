@@ -32,8 +32,8 @@ class EquipmentPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Equipment Registry', style: AppTextStyles.displaySmall.copyWith(color: AppColors.textPrimary)),
-                      const Gap(4),
+                      Text('Equipment Registry', style: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary)),
+                      const Gap(6),
                       Text('Keep a record of every serial number installed',
                           style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
                     ],
@@ -76,19 +76,21 @@ class EquipmentPage extends StatelessWidget {
                         child: Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
-                              child: Icon(_iconFor(item.type), color: AppColors.primary, size: 18),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(16)),
+                              child: Icon(_iconFor(item.type), color: AppColors.primary, size: 20),
                             ),
-                            const Gap(12),
+                            const Gap(14),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('${item.brand} ${item.model}', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-                                  Text('${item.typeLabel} · S/N ${item.serialNumber}',
-                                      style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
-                                  Text(DateFormat.yMMMd().format(item.registeredAt),
+                                  Text('${item.brand} ${item.model}',
+                                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
+                                  const Gap(6),
+                                  AppChip(label: item.typeLabel, color: _colorFor(item.type)),
+                                  const Gap(6),
+                                  Text('S/N ${item.serialNumber} · ${DateFormat.yMMMd().format(item.registeredAt)}',
                                       style: AppTextStyles.labelSmall.copyWith(color: AppColors.textTertiary)),
                                 ],
                               ),
@@ -118,6 +120,19 @@ class EquipmentPage extends StatelessWidget {
         return Icons.electrical_services_rounded;
       case EquipmentType.chargeController:
         return Icons.memory_rounded;
+    }
+  }
+
+  Color _colorFor(EquipmentType type) {
+    switch (type) {
+      case EquipmentType.panel:
+        return AppColors.primary;
+      case EquipmentType.battery:
+        return AppColors.success;
+      case EquipmentType.inverter:
+        return AppColors.info;
+      case EquipmentType.chargeController:
+        return AppColors.warning;
     }
   }
 
@@ -212,7 +227,7 @@ class _AddEquipmentSheetState extends State<_AddEquipmentSheet> {
                 selected: selected,
                 selectedColor: AppColors.primary,
                 backgroundColor: AppColors.surfaceElevated,
-                labelStyle: AppTextStyles.labelMedium.copyWith(color: selected ? Colors.black : AppColors.textPrimary),
+                labelStyle: AppTextStyles.labelMedium.copyWith(color: selected ? Colors.white : AppColors.textPrimary),
                 onSelected: (_) => setState(() => _type = t),
               );
             }).toList(),

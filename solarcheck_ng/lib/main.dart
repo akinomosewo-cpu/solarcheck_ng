@@ -9,8 +9,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
     systemNavigationBarColor: AppColors.background,
+    systemNavigationBarIconBrightness: Brightness.dark,
   ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const SolarCheckApp());
@@ -25,9 +26,9 @@ class SolarCheckApp extends StatelessWidget {
       child: MaterialApp(
         title: 'SolarCheck NG',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
-        darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.dark,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.light,
+        themeMode: ThemeMode.light,
         home: const HomePage(),
       ),
     );

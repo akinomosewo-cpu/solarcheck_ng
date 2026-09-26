@@ -22,11 +22,11 @@ class SizingPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
             children: [
-              Text('Solar Sizing', style: AppTextStyles.displaySmall.copyWith(color: AppColors.textPrimary)),
-              const Gap(4),
+              Text('Solar Sizing', style: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary)),
+              const Gap(6),
               Text('Add your appliances to get a recommended system size',
                   style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-              const Gap(20),
+              const Gap(24),
               SectionCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class SizingPage extends StatelessWidget {
                           selectedColor: AppColors.primary,
                           backgroundColor: AppColors.surfaceElevated,
                           labelStyle: AppTextStyles.labelMedium.copyWith(
-                            color: selected ? Colors.black : AppColors.textPrimary,
+                            color: selected ? Colors.white : AppColors.textPrimary,
                           ),
                           onSelected: (_) => context.read<AppBloc>().add(BackupDaysChanged(d)),
                         );
@@ -135,11 +135,15 @@ class _ResultsPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            const Icon(Icons.bolt_rounded, color: AppColors.primary),
-            const Gap(8),
-            Text('Recommended System', style: AppTextStyles.headlineSmall.copyWith(color: AppColors.textPrimary)),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(14)),
+              child: const Icon(Icons.bolt_rounded, color: AppColors.primary, size: 20),
+            ),
+            const Gap(10),
+            Text('Recommended System', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.textPrimary)),
           ]),
-          const Gap(16),
+          const Gap(18),
           _ResultRow(label: 'Daily energy need', value: '${currency.format(result.totalDailyEnergyWh.round())} Wh'),
           _ResultRow(label: 'Connected load', value: '${currency.format(result.totalLoadWatts.round())} W'),
           _ResultRow(label: 'Inverter size', value: '${currency.format(result.recommendedInverterWatts.round())} W'),

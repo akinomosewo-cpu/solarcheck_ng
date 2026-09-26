@@ -24,11 +24,11 @@ class InstallersPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
             children: [
-              Text('Installer Directory', style: AppTextStyles.displaySmall.copyWith(color: AppColors.textPrimary)),
-              const Gap(4),
+              Text('Installer Directory', style: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary)),
+              const Gap(6),
               Text('Verified installers near you, ranked by rating',
                   style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-              const Gap(20),
+              const Gap(24),
               ...installers.map((i) => Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: _InstallerCard(installer: i),
@@ -54,23 +54,25 @@ class _InstallerCard extends StatelessWidget {
         children: [
           Row(children: [
             Expanded(
-              child: Row(children: [
-                Text(installer.companyName, style: AppTextStyles.headlineSmall.copyWith(color: AppColors.textPrimary)),
-                if (installer.verified) ...[
-                  const Gap(6),
-                  const Icon(Icons.verified_rounded, color: AppColors.primary, size: 16),
-                ],
+              child: Text(installer.companyName, style: AppTextStyles.headlineLarge.copyWith(color: AppColors.textPrimary)),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(color: AppColors.warning.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(20)),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                const Icon(Icons.star_rounded, color: AppColors.warning, size: 15),
+                const Gap(3),
+                Text(installer.rating.toStringAsFixed(1), style: AppTextStyles.labelMedium.copyWith(color: AppColors.textPrimary)),
               ]),
             ),
-            Row(children: [
-              const Icon(Icons.star_rounded, color: AppColors.warning, size: 16),
-              const Gap(2),
-              Text(installer.rating.toStringAsFixed(1), style: AppTextStyles.labelMedium.copyWith(color: AppColors.textPrimary)),
-            ]),
           ]),
-          const Gap(4),
-          Text('${installer.location} · ${installer.completedInstalls} installs',
-              style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+          const Gap(10),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            if (installer.verified) const AppChip(label: 'Verified installer', color: AppColors.success, icon: Icons.verified_rounded),
+            AppChip(label: '${installer.completedInstalls} installs', color: AppColors.info, icon: Icons.storefront_rounded),
+          ]),
+          const Gap(8),
+          Text(installer.location, style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
           if (quotes.isNotEmpty) ...[
             const Gap(12),
             const Divider(height: 1),
